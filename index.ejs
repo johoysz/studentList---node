@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="ie-edge">
+		<meta name="viewport" name="width=device-width,initial-scale=1.0">
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+		<link rel="shortcut icon" href="#">
+
+		<title>Student List</title>
+	</head>
+	<body>
+		<div class="w3-bar w3-pink w3-container w3-padding">
+			<h3>Student List</h3>
+		</div>
+		<div class="w3-container w3-padding-16">
+			<%if(message!=""){ %>
+				<div class="w3-panel w3-amber w3-container w3-padding">
+					<%=message%>
+				</div>
+			<% }%>
+		
+			<button class="w3-right w3-button w3-blue" onclick="document.getElementById('studentmodal').style.display='block'">+ADD</button><br><br>
+			<table class="w3-table-all">
+				<tr>
+					<%for(var i=0;i<header.length;i++){%>
+						<th><%=header[i].toUpperCase()%></th>
+					<%}%>
+				</tr>
+				<%for(var i=0;i<studentlist.length;i++){%>
+				<tr>
+					<td><%=studentlist[i].idno%></td>
+					<td><%=studentlist[i].lastname.toUpperCase()%></td>
+					<td><%=studentlist[i].firstname.toUpperCase()%></td>
+					<td><%=studentlist[i].course.toUpperCase()%></td>
+					<td><%=studentlist[i].level%></td>
+					<td>
+						<button onclick="openUpdateModal('<%= studentlist[i].idno %>', '<%= studentlist[i].lastname %>', '<%= studentlist[i].firstname %>', '<%= studentlist[i].course %>', '<%= studentlist[i].level %>' )">&#9998;</button>
+						
+						<a href="/deletestudent?index=<%=i%>"><button onclick="return confirm('Are you sure you want to remove this record?');">&#128465;</button></a>
+					</td>
+				</tr>
+				<%}%>
+			</table>
+		</div>
+		<div class="w3-modal" id="studentmodal">
+			<div class="w3-modal-content w3-animate-top">
+				<div class="w3-container w3-green">
+					<h3>Student</h3>
+					<span class="w3-button w3-display-topright" onclick="document.getElementById('studentmodal').style.display='none'">&times;</span>
+				</div>
+				<div class="w3-container w3-padding">
+					<form method="post" action="/add">
+						<p>
+							<label for="idno1"><b>IDNO</b></label>
+							<input type="text" name="idno1" id="idno1" class="w3-input w3-border">
+						</p>
+						<p>
+							<label for="lastname1"><b>LASTNAME</b></label>
+							<input type="text" name="lastname1" id="lastname1" class="w3-input w3-border">
+						</p>
+						<p>
+							<label for="firstname1"><b>FIRSTNAME</b></label>
+							<input type="text" name="firstname1" id="firstname1" class="w3-input w3-border">
+						</p>
+						<p>
+							<label for="course1"><b>COURSE</b></label>
+							<input type="text" name="course1" id="course1" class="w3-input w3-border">
+						</p>
+						<p>
+							<label for="level1"><b>LEVEL</b></label>
+							<input type="text" name="level1" id="level1" class="w3-input w3-border">
+						</p>
+						<p>
+							<input type="submit" value="&#128427; SAVE" class="w3-button w3-blue w3-right">
+						</p><br><br>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="w3-modal" id="updatemodal">
+			<div class="w3-modal-content w3-animate-top">
+				<div class="w3-container w3-blue">
+					<h3>Student</h3>
+					<span class="w3-button w3-display-topright" onclick="document.getElementById('updatemodal').style.display='none'">&times;</span>
+				</div>
+				<div class="w3-container w3-padding">
+					<form method="post" action="/updatestudent/<%= idno %>/<%= lastname%>/<%= firstname%>/<%= course%>/<%= level%>" id="updateForm">
+						<p>
+							<label for="idno"><b>IDNO</b></label>
+							<input value="<%= idno %>" type="text" name="idno" id="idno" class="w3-input w3-border" readonly>
+						</p>
+						<p>
+							<label for="lastname"><b>LASTNAME</b></label>
+							<input value="<%= lastname%>" type="text" name="lastname" id="lastname" class="w3-input w3-border">
+						</p>
+						<p>
+							<label for="firstname"><b>FIRSTNAME</b></label>
+							<input value="<%= firstname%>" type="text" name="firstname" id="firstname" class="w3-input w3-border">
+						</p>
+						<p>
+							<label for="course"><b>COURSE</b></label>
+							<input value="<%= course%>" type="text" name="course" id="course" class="w3-input w3-border">
+						</p>
+						<p>
+							<label for="level"><b>LEVEL</b></label>
+							<input value="<%= level%>" type="text" name="level" id="level" class="w3-input w3-border">
+						</p>
+						<p>
+							<input type="submit" value="&#128427; SAVE" class="w3-button w3-blue w3-right">
+						</p><br><br>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script>
+		function openUpdateModal(idno,lastname,firstname,course,level) {
+			if (confirm("Are you sure you want to update this record?") == true) {
+				document.getElementById('updatemodal').style.display = 'block';
+				
+				document.getElementById('idno').value = idno;
+				document.getElementById('lastname').value = lastname;
+				document.getElementById('firstname').value = firstname;
+				document.getElementById('course').value = course;
+				document.getElementById('level').value = level;
+				document.getElementById('updateForm').action = "/updatestudent/" + idno + "/" + lastname + "/" + firstname + "/" +course+ "/" +level;
+			}
+		}
+	</script>
+</html>
